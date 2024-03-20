@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->integer('quantity_purchased');
+            $table->boolean('bored')->default(false);
+            $table->unsignedBigInteger('mobile_user_id');
+            $table->unsignedBigInteger('trip_info_id');
             $table->timestamps();
+
+            $table->foreign('mobile_user_id')->references('id')->on('users');
+            $table->foreign('trip_info_id')->references('id')->on('trip_infos');
         });
     }
 

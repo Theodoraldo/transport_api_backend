@@ -15,6 +15,8 @@ class TripInfo extends Model
 {
     use HasFactory;
 
+    public $fillable = ['car_id', 'driver_id', 'web_user_id', 'fare', 'trip_from', 'trip_to', 'trip_date', 'trip_time', 'mode'];
+
     public function booking() : HasMany
     {
         return $this->hasMany(Booking::class);

@@ -11,6 +11,7 @@ class Car extends Model
 {
     use HasFactory;
 
+    public $fillable = ['brand', 'model', 'number_plate', 'color', 'seater'];
     public function tripInfo() : HasMany
     {
         return $this->hasMany(TripInfo::class);

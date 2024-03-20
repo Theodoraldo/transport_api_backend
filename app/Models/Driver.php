@@ -10,6 +10,8 @@ class Driver extends Model
 {
     use HasFactory;
 
+    public $fillable = ['firstname', 'lastname', 'phone_number', 'address'];
+
     public function tripInfo() : HasMany
     {
         return $this->hasMany(TripInfo::class);
