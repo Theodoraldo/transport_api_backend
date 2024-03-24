@@ -14,6 +14,18 @@ class Booking extends Model
 
     public $fillable = ['quantity_purchased', 'mobile_user_id', 'trip_info_id'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($booking) {
+            $tripInfo = $booking->tripInfo;
+            if ($tripInfo) {
+                $tripInfo->updateQuantitySold($booking->quantity_purchased);
+            }
+        });
+    }
+
     public function mobileUser() : BelongsTo
     {
         return $this->belongsTo(MobileUser::class);
