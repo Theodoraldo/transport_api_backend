@@ -11,7 +11,7 @@ class WebUser extends User
 {
     use HasParent, HasFactory;
 
-    public function tripInfo() : HasMany
+    public function tripInfos() : HasMany
     {
         return $this->hasMany(TripInfo::class);
     }

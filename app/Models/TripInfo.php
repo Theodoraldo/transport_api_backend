@@ -45,7 +45,7 @@ class TripInfo extends Model
         $this->decrement('quantity_sold', $quantityPurchased);
     }
 
-    public function booking() : HasMany
+    public function bookings() : HasMany
     {
         return $this->hasMany(Booking::class);
     }
