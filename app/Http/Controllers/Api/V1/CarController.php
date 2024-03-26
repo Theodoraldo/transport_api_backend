@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Car;
 use Illuminate\Http\Response;
-use Ramsey\Uuid\Type\Integer;
 
 class CarController extends Controller
 {
