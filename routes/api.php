@@ -23,4 +23,5 @@ Route::prefix('v1')->group(function()
     Route::apiResource('webuser', WebUserController::class);
     Route::apiResource('mobileuser', MobileUserController::class);
     Route::apiResource('user', UserController::class);
+    Route::put('/trips/{id}/ticketing', [TripInfoController::class, 'updateQuantity']);
 });
