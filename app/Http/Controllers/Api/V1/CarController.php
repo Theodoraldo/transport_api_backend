@@ -6,45 +6,66 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Car;
 use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
 
 class CarController extends Controller
 {
     public function index()
     {
-        $cars = Car::all();
-        return response()->json($cars, Response::HTTP_OK);
+        try {
+            $cars = Car::all();
+            return response()->json($cars, Response::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        try {
+            Car::create($request->all());
+            return response()->json("Created Successfully", Response::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Could not create car'], Response::HTTP_BAD_REQUEST);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(String $id)
     {
-        $car = Car::findOrFail($id);
-        return response()->json($car, Response::HTTP_OK);
+        try {
+            $car = Car::findOrFail($id);
+            return response()->json($car, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Car not found'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $car = Car::findOrFail($id);
+            $car->update($request->all());
+            return response()->json("Updated Successfully", Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Car not found'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Could not update car'], Response::HTTP_BAD_REQUEST);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        try {
+            $car = Car::findOrFail($id);
+            $car->delete();
+            return response()->json("Deleted Successfully", Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Car not found'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Could not delete car'], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
