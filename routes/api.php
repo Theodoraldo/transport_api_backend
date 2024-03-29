@@ -20,8 +20,8 @@ Route::prefix('v1')->group(function()
     Route::apiResource('driver', DriverController::class);
     Route::apiResource('booking', BookingController::class);
     Route::apiResource('trip', TripInfoController::class);
-    Route::apiResource('webuser', WebUserController::class);
-    Route::apiResource('mobileuser', MobileUserController::class);
+    Route::apiResource('webuser', WebUserController::class, ['only'=>['index', 'show']]);
+    Route::apiResource('mobileuser', MobileUserController::class, ['only'=>['index', 'show']]);
     Route::apiResource('user', UserController::class);
     Route::put('/trips/{id}/ticketing', [TripInfoController::class, 'updateQuantity']);
 });

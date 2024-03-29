@@ -11,10 +11,11 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function index() {
+    public function index()
+    {
 
         try {
-            $bookings = Booking::with('mobileuser','tripinfo')->get();
+            $bookings = Booking::with('mobileuser', 'tripinfo')->get();
             return response()->json($bookings, Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -24,7 +25,7 @@ class BookingController extends Controller
     public function show(String $id)
     {
         try {
-            $booking = Booking::with('mobileuser','tripinfo')->findOrFail($id);
+            $booking = Booking::with('mobileuser', 'tripinfo')->findOrFail($id);
             return response()->json($booking, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Booking details not found'], Response::HTTP_NOT_FOUND);

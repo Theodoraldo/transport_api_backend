@@ -11,10 +11,10 @@ use Illuminate\Http\Request;
 
 class TripInfoController extends Controller
 {
-    public function index() {
-
+    public function index()
+    {
         try {
-            $trips = TripInfo::with('car','driver')->get();
+            $trips = TripInfo::with('car', 'driver')->get();
             return response()->json($trips, Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -71,9 +71,7 @@ class TripInfoController extends Controller
     {
         try {
             $trip = TripInfo::findOrFail($id);
-
             $quantity = $request->input('quantity_sold');
-
             $trip->increment('quantity_sold', $quantity);
 
             return response()->json("Issued ticket Successfully", Response::HTTP_OK);
@@ -83,5 +81,4 @@ class TripInfoController extends Controller
             return response()->json(['error' => 'Could not issue ticket at this time'], Response::HTTP_BAD_REQUEST);
         }
     }
-
 }
