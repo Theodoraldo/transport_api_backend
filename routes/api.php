@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\BookingController;
 use App\Http\Controllers\Api\V1\CarController;
 use App\Http\Controllers\Api\V1\DriverController;
@@ -28,5 +29,6 @@ Route::prefix('api/v1')->group(function () {
     Route::apiResource('driver', DriverController::class);
     Route::apiResource('booking', BookingController::class);
     Route::apiResource('trip', TripInfoController::class);
+    Route::apiResource('users', UserController::class, ['only' => ['index', 'show']]);
     Route::put('/trips/{id}/ticketing', [TripInfoController::class, 'updateQuantity']);
-});
+})->middleware('auth:sanctum');
