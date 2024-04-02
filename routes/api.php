@@ -15,20 +15,24 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Web User
-Route::post('/register', [WebUserController::class, 'register']);
-Route::post('/login', [WebUserController::class, 'login']);
-Route::post('/logout', [WebUserController::class, 'logout']);
+Route::controller(WebUserController::class)->group(function () {
+    Route::post('/register', 'register');
+    Route::post('/login', 'login');
+    Route::get('/logout', 'logout');
+});
 
 // Mobile User
-Route::post('/signup', [MobileUserController::class, 'signup']);
-Route::post('/signin', [MobileUserController::class, 'signin']);
-Route::post('/signout', [MobileUserController::class, 'signout']);
+Route::controller(MobileUserController::class)->group(function () {
+    Route::post('/signup', 'signup');
+    Route::post('/signin', 'signin');
+    Route::get('/signout', 'signout');
+});
 
-Route::prefix('api/v1')->group(function () {
-    Route::apiResource('car', CarController::class);
+Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:sanctum']], function () {
+    Route::apiResource('users', UserController::class, ['only' => ['index', 'show', 'update']]);
+    Route::put('/trips/{id}/ticketing', [TripInfoController::class, 'updateQuantity']);
     Route::apiResource('driver', DriverController::class);
+    Route::apiResource('car', CarController::class);
     Route::apiResource('booking', BookingController::class);
     Route::apiResource('trip', TripInfoController::class);
-    Route::apiResource('users', UserController::class, ['only' => ['index', 'show']]);
-    Route::put('/trips/{id}/ticketing', [TripInfoController::class, 'updateQuantity']);
-})->middleware('auth:sanctum');
+});
