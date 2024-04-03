@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-
 class UserController extends Controller
 {
     public function index()
