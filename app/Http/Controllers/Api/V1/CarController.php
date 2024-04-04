@@ -8,13 +8,14 @@ use App\Models\Car;
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
+use App\Http\Resources\V1\CarResource;
 
 class CarController extends Controller
 {
     public function index()
     {
         try {
-            $cars = Car::all();
+            $cars = CarResource::collection(Car::all());
             return response()->json($cars, Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -34,7 +35,7 @@ class CarController extends Controller
     public function show(String $id)
     {
         try {
-            $car = Car::findOrFail($id);
+            $car = new CarResource(Car::findOrFail($id));
             return response()->json($car, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Car not found'], Response::HTTP_NOT_FOUND);

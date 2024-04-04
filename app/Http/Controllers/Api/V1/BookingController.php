@@ -8,15 +8,22 @@ use Exception;
 use App\Models\Booking;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use App\Services\V1\BookingFilterQuery;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-
         try {
-            $bookings = Booking::with('mobileuser', 'tripinfo')->get();
-            return response()->json($bookings, Response::HTTP_OK);
+            $filter = new BookingFilterQuery();
+            $queryItems = $filter->transform($request);
+            if (count($queryItems) === 0) {
+                $bookings = Booking::with('mobileuser', 'tripinfo')->paginate();
+                return response()->json($bookings, Response::HTTP_OK);
+            } else {
+                $bookings = Booking::with('mobileuser', 'tripinfo')->where($queryItems)->paginate();
+                return response()->json($bookings, Response::HTTP_OK);
+            }
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -24,7 +24,6 @@ class MobileUserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
-            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -85,18 +84,17 @@ class MobileUserController extends Controller
         try {
             $user = MobileUser::findOrFail($request->id);
 
-            // $validator = Validator::make($user, [
-            //     'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            //     'cellphone' => 'required',
-            // ]);
+            $validator = Validator::make($request->all(), [
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
 
-            // if ($validator->fails()) {
-            //     return response([
-            //         'error' => $validator->errors(),
-            //     ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            // }
+            if ($validator->fails()) {
+                return response([
+                    'error' => $validator->errors(),
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
 
-            $data = $request->except('image', 'type', 'password', 'email', 'name');
+            $data = $request->except(['image', 'type', 'password', 'email', 'name']);
             $user->fill($data);
 
             if ($request->hasFile('image')) {

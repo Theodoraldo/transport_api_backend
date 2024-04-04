@@ -6,16 +6,24 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use App\Http\Controllers\Controller;
 use App\Models\TripInfo;
+use App\Services\V1\TripInfoFilterQuery;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class TripInfoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $trips = TripInfo::with('car', 'driver')->get();
-            return response()->json($trips, Response::HTTP_OK);
+            $filter = new TripInfoFilterQuery();
+            $queryItems = $filter->transform($request);
+            if (count($queryItems) === 0) {
+                $trips = TripInfo::with('car', 'driver')->get();
+                return response()->json($trips, Response::HTTP_OK);
+            } else {
+                $trips = TripInfo::with('car', 'driver')->where($queryItems)->get();
+                return response()->json($trips, Response::HTTP_OK);
+            }
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
