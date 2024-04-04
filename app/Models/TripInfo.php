@@ -35,7 +35,17 @@ class TripInfo extends Model
         return '₵ ' . $value . ' p';
     }
 
-    public function booking() : HasMany
+    public function updateQuantitySold($quantityPurchased)
+    {
+        $this->increment('quantity_sold', $quantityPurchased);
+    }
+
+    public function decreaseQuantitySold($quantityPurchased)
+    {
+        $this->decrement('quantity_sold', $quantityPurchased);
+    }
+
+    public function bookings() : HasMany
     {
         return $this->hasMany(Booking::class);
     }

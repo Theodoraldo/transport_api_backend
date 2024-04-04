@@ -12,7 +12,26 @@ class Booking extends Model
 {
     use HasFactory;
 
-    public $fillable = ['quantity_purchased', 'mobile_user_id', 'trip_info_id'];
+    public $fillable = ['quantity_purchased','bored', 'mobile_user_id', 'trip_info_id'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($booking) {
+            $tripInfo = $booking->tripInfo;
+            if ($tripInfo) {
+                $tripInfo->updateQuantitySold($booking->quantity_purchased);
+            }
+        });
+
+        static::deleted(function ($booking) {
+            $tripInfo = $booking->tripInfo;
+            if ($tripInfo) {
+                $tripInfo->decreaseQuantitySold($booking->quantity_purchased);
+            }
+        });
+    }
 
     public function mobileUser() : BelongsTo
     {

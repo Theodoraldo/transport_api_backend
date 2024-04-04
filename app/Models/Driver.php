@@ -26,7 +26,7 @@ class Driver extends Model
         return $this->firstname . ' ' . $this->lastname;
     }
 
-    public function tripInfo() : HasMany
+    public function tripInfos() : HasMany
     {
         return $this->hasMany(TripInfo::class);
     }
