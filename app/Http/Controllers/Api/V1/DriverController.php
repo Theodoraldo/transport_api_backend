@@ -8,13 +8,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use App\Models\Driver;
+use App\Http\Resources\V1\DriverResource;
 
 class DriverController extends Controller
 {
     public function index()
     {
         try {
-            $drivers = Driver::all();
+            $drivers = DriverResource::collection(Driver::all());
             return response()->json($drivers, Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -34,7 +35,7 @@ class DriverController extends Controller
     public function show(String $id)
     {
         try {
-            $driver = Driver::findOrFail($id);
+            $driver = new DriverResource(Driver::findOrFail($id));
             return response()->json($driver, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Driver details not found'], Response::HTTP_NOT_FOUND);
