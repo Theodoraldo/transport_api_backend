@@ -18,10 +18,10 @@ class TripInfoController extends Controller
             $filter = new TripInfoFilterQuery();
             $queryItems = $filter->transform($request);
             if (count($queryItems) === 0) {
-                $trips = TripInfo::with('car', 'driver')->get();
+                $trips = TripInfo::with('car', 'driver', 'webuser')->get();
                 return response()->json($trips, Response::HTTP_OK);
             } else {
-                $trips = TripInfo::with('car', 'driver')->where($queryItems)->get();
+                $trips = TripInfo::with('car', 'driver', 'webuser')->where($queryItems)->get();
                 return response()->json($trips, Response::HTTP_OK);
             }
         } catch (Exception $e) {
