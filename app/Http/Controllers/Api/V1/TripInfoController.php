@@ -19,10 +19,15 @@ class TripInfoController extends Controller
             $filter = new TripInfoFilterQuery();
             $queryItems = $filter->transform($request);
             if (count($queryItems) === 0) {
-                $trips = TripInfoResource::collection(TripInfo::with('car', 'driver', 'webuser')->get());
+                $trips = TripInfoResource::collection(TripInfo::with('car', 'driver', 'webuser')
+                    ->orderBy('trip', 'desc')
+                    ->get());
                 return response()->json($trips, Response::HTTP_OK);
             } else {
-                $trips = TripInfoResource::collection(TripInfo::with('car', 'driver', 'webuser')->where($queryItems)->get());
+                $trips = TripInfoResource::collection(TripInfo::with('car', 'driver', 'webuser')
+                    ->where($queryItems)
+                    ->orderBy('trip_date', 'desc')
+                    ->get());
                 return response()->json($trips, Response::HTTP_OK);
             }
         } catch (Exception $e) {
@@ -33,7 +38,7 @@ class TripInfoController extends Controller
     public function show(String $id)
     {
         try {
-            $trip = TripInfoResource::collection(TripInfo::with('car', 'driver')->findOrFail($id));
+            $trip = new TripInfoResource(TripInfo::with('car', 'driver')->findOrFail($id));
             return response()->json($trip, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Trip details not found'], Response::HTTP_NOT_FOUND);

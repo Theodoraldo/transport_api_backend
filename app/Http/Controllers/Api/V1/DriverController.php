@@ -15,7 +15,7 @@ class DriverController extends Controller
     public function index()
     {
         try {
-            $drivers = DriverResource::collection(Driver::all());
+            $drivers = DriverResource::collection(Driver::paginate());
             return response()->json($drivers, Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
