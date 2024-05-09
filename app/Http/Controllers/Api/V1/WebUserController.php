@@ -44,7 +44,7 @@ class WebUserController extends Controller
         ]);
 
         return response([
-            'message' => 'New mobile user created successfully',
+            'message' => 'New web user created successfully',
         ], Response::HTTP_CREATED);
     }
 
