@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity_purchased');
-            $table->boolean('bored')->default(false);
+            $table->boolean('board')->default(false);
             $table->unsignedBigInteger('mobile_user_id');
             $table->unsignedBigInteger('trip_info_id');
             $table->timestamps();

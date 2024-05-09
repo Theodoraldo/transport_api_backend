@@ -15,7 +15,7 @@ class CarController extends Controller
     public function index()
     {
         try {
-            $cars = CarResource::collection(Car::all());
+            $cars = CarResource::collection(Car::paginate());
             return response()->json($cars, Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
