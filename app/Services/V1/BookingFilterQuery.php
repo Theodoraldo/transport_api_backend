@@ -10,8 +10,8 @@ class BookingFilterQuery
     {
         $queryItems = [];
 
-        if ($request->has('status')) {
-            $queryItems['status'] = $request->input('status');
+        if ($request->has('bored')) {
+            $queryItems['bored'] = $request->input('bored');
         }
 
         return $queryItems;
