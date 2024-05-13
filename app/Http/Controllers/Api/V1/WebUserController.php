@@ -31,21 +31,31 @@ class WebUserController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        $user = null;
+
         $defaultImagePath = 'default.png';
         $newImagePath = date('Y-m-d_H-i-s') . '.png';
 
         Storage::disk('images')->copy($defaultImagePath, $newImagePath);
 
-        WebUser::create([
+        $user = WebUser::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'image' => $newImagePath,
         ]);
 
-        return response([
-            'message' => 'New web user created successfully',
-        ], Response::HTTP_CREATED);
+        if ($user) {
+            return response([
+                'message' => 'New web user created successfully',
+                'user_id' => $user->id,
+                'name' => $user->name,
+            ], Response::HTTP_CREATED);
+        } else {
+            return response([
+                'error' => 'Failed to create new web user',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function login(Request $request)
@@ -67,14 +77,21 @@ class WebUserController extends Controller
 
             $token = $request->user()->createToken('web')->plainTextToken;
             $cookie = cookie('jwt', $token, 60 * 24);
+
+            // Fetch the user data after successful login
+            $user = Auth::user();
+
+            // Return the user data along with the token
+            return response([
+                'message' => $token,
+                'user_id' => $user->id,
+                'name' => $user->name,
+            ])->withCookie($cookie);
         } catch (\Exception $e) {
             return response([
                 'error' => ['Request failed: ' . $e->getMessage(), 'code' => $e->getCode()]
             ], Response::HTTP_BAD_REQUEST);
         }
-
-        return response([
-            'message' => $token,
-        ])->withCookie($cookie);
     }
+
 }
