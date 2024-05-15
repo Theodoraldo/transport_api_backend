@@ -25,7 +25,7 @@ class CarController extends Controller
     {
         try {
             Car::create($request->all());
-            return response()->json("Created Successfully", Response::HTTP_OK);
+            return response()->json(['status' => Response::HTTP_CREATED, 'message' => 'Created Successfully !!!'], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return ExceptionHandler::handleException($e);
         }
@@ -46,7 +46,7 @@ class CarController extends Controller
         try {
             $car = Car::findOrFail($id);
             $car->update($request->all());
-            return response()->json("Updated Successfully", Response::HTTP_OK);
+            return response()->json(['status' => Response::HTTP_OK, 'message' => 'Updated Successfully !!!'], Response::HTTP_OK);
         } catch (\Exception $e) {
             return ExceptionHandler::handleException($e);
         }
@@ -57,7 +57,7 @@ class CarController extends Controller
         try {
             $car = Car::findOrFail($id);
             $car->delete();
-            return response()->json("Deleted Successfully", Response::HTTP_OK);
+            return response()->json(['status' => Response::HTTP_OK, 'message' => 'Deleted Successfully !!!'], Response::HTTP_OK);
         } catch (\Exception $e) {
             return ExceptionHandler::handleException($e);
         }

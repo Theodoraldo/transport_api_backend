@@ -13,12 +13,8 @@ class Car extends Model
 
     public $fillable = ['brand', 'model', 'number_plate', 'color', 'seater'];
 
-    public function tripInfos() : HasMany
+    public function tripInfos(): HasMany
     {
         return $this->hasMany(TripInfo::class);
     }
-
-    public function getSeaterAttribute($value) {
-        return $value . ' seats';
-    }    
 }
